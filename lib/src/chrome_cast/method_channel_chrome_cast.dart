@@ -88,10 +88,7 @@ class MethodChannelChromeCast extends ChromeCastPlatform {
 
   @override
   Future<void> seek(bool relative, double interval, {@required int id}) {
-    final Map<String, dynamic> args = {
-      'relative': relative,
-      'interval': interval
-    };
+    final Map<String, dynamic> args = {'relative': relative, 'interval': interval};
     return channel(id).invokeMethod<void>('chromeCast#seek', args);
   }
 
@@ -110,6 +107,11 @@ class MethodChannelChromeCast extends ChromeCastPlatform {
     return channel(id).invokeMethod<bool>('chromeCast#isPlaying');
   }
 
+  @override
+  Stream<ProgressChangedEvent> progressChanged({@required int id}) {
+    return _events(id).whereType<ProgressChangedEvent>();
+  }
+
   Future<dynamic> _handleMethodCall(MethodCall call, int id) async {
     switch (call.method) {
       case 'chromeCast#didStartSession':
@@ -122,8 +124,10 @@ class MethodChannelChromeCast extends ChromeCastPlatform {
         _eventStreamController.add(RequestDidCompleteEvent(id));
         break;
       case 'chromeCast#requestDidFail':
-        _eventStreamController
-            .add(RequestDidFailEvent(id, call.arguments['error']));
+        _eventStreamController.add(RequestDidFailEvent(id, call.arguments['error']));
+        break;
+      case 'chromeCast#progressChanged':
+        _eventStreamController.add(ProgressChangedEvent(id, call.arguments['progress']));
         break;
       default:
         throw MissingPluginException();
@@ -131,8 +135,8 @@ class MethodChannelChromeCast extends ChromeCastPlatform {
   }
 
   @override
-  Widget buildView(Map<String, dynamic> arguments,
-      PlatformViewCreatedCallback onPlatformViewCreated) {
+  Widget buildView(
+      Map<String, dynamic> arguments, PlatformViewCreatedCallback onPlatformViewCreated) {
     if (defaultTargetPlatform == TargetPlatform.android) {
       return AndroidView(
         viewType: 'ChromeCastButton',

@@ -38,3 +38,12 @@ class RequestDidFailEvent extends ChromeCastEvent {
   /// Build a RequestDidFail Event triggered from the button represented by `id`.
   RequestDidFailEvent(int id, this.error) : super(id);
 }
+
+/// An event fired when a request of a [id] failed.
+class ProgressChangedEvent extends ChromeCastEvent {
+  /// The error message.
+  final int progress;
+
+  /// Build a RequestDidFail Event triggered from the button represented by `id`.
+  ProgressChangedEvent(int id, this.progress) : super(id);
+}

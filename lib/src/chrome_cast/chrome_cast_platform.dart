@@ -90,6 +90,11 @@ abstract class ChromeCastPlatform {
     throw UnimplementedError('isPlaying() has not been implemented.');
   }
 
+  /// Returns `true` when a cast session is connected, `false` otherwise.
+  Stream<ProgressChangedEvent> progressChanged({@required int id}) {
+    throw UnimplementedError('seek() has not been implemented.');
+  }
+
   /// Returns a widget displaying the button.
   Widget buildView(Map<String, dynamic> arguments,
       PlatformViewCreatedCallback onPlatformViewCreated) {

@@ -179,17 +179,35 @@ class ChromeCastController: NSObject, FlutterPlatformView {
 extension ChromeCastController: GCKSessionManagerListener {
     func sessionManager(_ sessionManager: GCKSessionManager, didStart session: GCKSession) {
         channel.invokeMethod("chromeCast#didStartSession", arguments: nil)
+        sessionManager.currentCastSession?.remoteMediaClient?.add(self)
     }
 
     func sessionManager(_ sessionManager: GCKSessionManager, didEnd session: GCKSession, withError error: Error?) {
         channel.invokeMethod("chromeCast#didEndSession", arguments: nil)
+        sessionManager.currentCastSession?.remoteMediaClient?.remove(self)
+        
     }
+}
+
+extension ChromeCastController: GCKRemoteMediaClientListener {
+    
+    public func remoteMediaClient(_ client: GCKRemoteMediaClient, didUpdate mediaStatus: GCKMediaStatus?) {
+        var position = mediaStatus?.streamPosition ?? TimeInterval(0)
+        var args = [
+            "progress" :position.milliseconds,
+        ]
+        
+            channel.invokeMethod("chromeCast#progressChanged", arguments: args)
+            print("position: \(mediaStatus?.streamPosition)")
+        }
+    
 }
 
 // MARK: - GCKRequestDelegate
 
 extension ChromeCastController: GCKRequestDelegate {
     func requestDidComplete(_ request: GCKRequest) {
+
         channel.invokeMethod("chromeCast#requestDidComplete", arguments: nil)
     }
 
@@ -197,3 +215,17 @@ extension ChromeCastController: GCKRequestDelegate {
         channel.invokeMethod("chromeCast#requestDidFail", arguments: ["error" : error.localizedDescription])
     }
 }
+
+extension TimeInterval {
+
+    var seconds: Int {
+        return Int(self.rounded())
+    }
+
+    var milliseconds: Int {
+        return Int(self * 1_000)
+    }
+}
+
+
+

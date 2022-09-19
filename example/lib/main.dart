@@ -47,11 +47,16 @@ class _CastSampleState extends State<CastSample> {
             onSessionEnded: () => setState(() => _state = AppState.idle),
             onRequestCompleted: _onRequestCompleted,
             onRequestFailed: _onRequestFailed,
+            onProgressChanged: _onProgressChanged,
           ),
         ],
       ),
       body: Center(child: _handleState()),
     );
+  }
+
+  _onProgressChanged(int progress) {
+    print('progress: $progress');
   }
 
   Widget _handleState() {

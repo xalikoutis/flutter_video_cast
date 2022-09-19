@@ -1,6 +1,7 @@
 package it.aesys.flutter_video_cast
 
 import android.content.Context
+import android.util.Log
 import android.view.ContextThemeWrapper
 import androidx.mediarouter.app.MediaRouteButton
 import com.google.android.gms.cast.MediaInfo
@@ -9,12 +10,14 @@ import com.google.android.gms.cast.framework.CastButtonFactory
 import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.cast.framework.Session
 import com.google.android.gms.cast.framework.SessionManagerListener
+import com.google.android.gms.cast.framework.media.RemoteMediaClient
 import com.google.android.gms.common.api.PendingResult
 import com.google.android.gms.common.api.Status
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView
+import java.util.HashMap
 
 class ChromeCastController(
         messenger: BinaryMessenger,
@@ -39,9 +42,27 @@ class ChromeCastController(
             val options = MediaLoadOptions.Builder().build()
             val request =
                 media?.let { sessionManager?.currentCastSession?.remoteMediaClient?.load(it, options) }
+
             request?.addStatusListener(this)
+            request?.addStatusListener { status -> if (status.isSuccess) {
+                sessionManager?.currentCastSession?.remoteMediaClient?.removeProgressListener(mRemoteMediaClientListener)
+                sessionManager?.currentCastSession?.remoteMediaClient?.addProgressListener(mRemoteMediaClientListener,2000)
+            }}
+
         }
     }
+
+    private val mRemoteMediaClientListener: RemoteMediaClient.ProgressListener =
+        object : RemoteMediaClient.ProgressListener {
+            override fun onProgressUpdated(p0: Long, p1: Long) {
+                val event: MutableMap<String, Any> = HashMap()
+                event["progress"] = p0
+                channel.invokeMethod("chromeCast#progressChanged", event)
+                //sendSeekToEvent(p0,true)
+                //Log.d(TAG, "Cast Progress ${p0}")
+            }
+
+        }
 
     private fun play() {
         val request = sessionManager?.currentCastSession?.remoteMediaClient?.play()

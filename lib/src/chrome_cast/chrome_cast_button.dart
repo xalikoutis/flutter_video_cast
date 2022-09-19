@@ -9,6 +9,8 @@ typedef void OnButtonCreated(ChromeCastController controller);
 /// Callback method for when a request has failed.
 typedef void OnRequestFailed(String error);
 
+typedef void OnProgressChanged(int progress);
+
 /// Widget that displays the ChromeCast button.
 class ChromeCastButton extends StatelessWidget {
   /// Creates a widget displaying a ChromeCast button.
@@ -20,6 +22,7 @@ class ChromeCastButton extends StatelessWidget {
       this.onSessionStarted,
       this.onSessionEnded,
       this.onRequestCompleted,
+        this.onProgressChanged,
       this.onRequestFailed})
       : assert(
             defaultTargetPlatform == TargetPlatform.iOS ||
@@ -50,6 +53,8 @@ class ChromeCastButton extends StatelessWidget {
 
   /// Called when a cast request has failed.
   final OnRequestFailed onRequestFailed;
+
+  final OnProgressChanged onProgressChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +95,12 @@ class ChromeCastButton extends StatelessWidget {
       _chromeCastPlatform
           .onRequestFailed(id: id)
           .listen((event) => onRequestFailed(event.error));
+    }
+
+    if ( onProgressChanged!= null) {
+      _chromeCastPlatform
+          .progressChanged(id: id)
+          .listen((event) => onProgressChanged(event.progress));
     }
   }
 }
