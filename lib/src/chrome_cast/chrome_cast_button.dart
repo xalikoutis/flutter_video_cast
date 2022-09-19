@@ -12,7 +12,7 @@ typedef void OnRequestFailed(String error);
 typedef void OnProgressChanged(int progress);
 
 /// Widget that displays the ChromeCast button.
-class ChromeCastButton extends StatelessWidget {
+class ChromeCastButton extends StatefulWidget {
   /// Creates a widget displaying a ChromeCast button.
   ChromeCastButton(
       {Key key,
@@ -57,50 +57,62 @@ class ChromeCastButton extends StatelessWidget {
   final OnProgressChanged onProgressChanged;
 
   @override
+  State<ChromeCastButton> createState() => _ChromeCastButtonState();
+}
+
+class _ChromeCastButtonState extends State<ChromeCastButton> {
+
+  @override
+  void dispose() {
+    _chromeCastPlatform.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final Map<String, dynamic> args = {
-      'red': color.red,
-      'green': color.green,
-      'blue': color.blue,
-      'alpha': color.alpha
+      'red': widget.color.red,
+      'green': widget.color.green,
+      'blue': widget.color.blue,
+      'alpha': widget.color.alpha
     };
     return SizedBox(
-      width: size,
-      height: size,
+      width: widget.size,
+      height: widget.size,
       child: _chromeCastPlatform.buildView(args, _onPlatformViewCreated),
     );
   }
 
   Future<void> _onPlatformViewCreated(int id) async {
     final ChromeCastController controller = await ChromeCastController.init(id);
-    if (onButtonCreated != null) {
-      onButtonCreated(controller);
+    if (widget.onButtonCreated != null) {
+      widget.onButtonCreated(controller);
     }
-    if (onSessionStarted != null) {
+    if (widget.onSessionStarted != null) {
       _chromeCastPlatform
           .onSessionStarted(id: id)
-          .listen((_) => onSessionStarted());
+          .listen((_) => widget.onSessionStarted());
     }
-    if (onSessionEnded != null) {
+    if (widget.onSessionEnded != null) {
       _chromeCastPlatform
           .onSessionEnded(id: id)
-          .listen((_) => onSessionEnded());
+          .listen((_) => widget.onSessionEnded());
     }
-    if (onRequestCompleted != null) {
+    if (widget.onRequestCompleted != null) {
       _chromeCastPlatform
           .onRequestCompleted(id: id)
-          .listen((_) => onRequestCompleted());
+          .listen((_) => widget.onRequestCompleted());
     }
-    if (onRequestFailed != null) {
+    if (widget.onRequestFailed != null) {
       _chromeCastPlatform
           .onRequestFailed(id: id)
-          .listen((event) => onRequestFailed(event.error));
+          .listen((event) => widget.onRequestFailed(event.error));
     }
 
-    if ( onProgressChanged!= null) {
+    if ( widget.onProgressChanged!= null) {
       _chromeCastPlatform
           .progressChanged(id: id)
-          .listen((event) => onProgressChanged(event.progress));
+          .listen((event) => widget.onProgressChanged(event.progress));
     }
   }
 }

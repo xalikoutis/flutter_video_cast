@@ -53,6 +53,10 @@ class ChromeCastController {
     return _chromeCastPlatform.stop(id: id);
   }
 
+  Future<void> dispose() {
+    return _chromeCastPlatform.dispose(id: id);
+  }
+
   /// Returns `true` when a cast session is connected, `false` otherwise.
   Future<bool> isConnected() {
     return _chromeCastPlatform.isConnected(id: id);

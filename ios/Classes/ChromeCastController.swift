@@ -92,6 +92,10 @@ class ChromeCastController: NSObject, FlutterPlatformView {
             stop()
             result(nil)
             break
+        case "chromeCast#dispose":
+            dispose()
+            result(nil)
+            break
         case "chromeCast#isConnected":
             result(isConnected())
             break
@@ -156,6 +160,10 @@ class ChromeCastController: NSObject, FlutterPlatformView {
             request.delegate = self
         }
     }
+    
+    private func dispose() {
+        sessionManager.endSessionAndStopCasting(true)
+    }
 
     private func isConnected() -> Bool {
         return sessionManager.currentCastSession?.remoteMediaClient?.connected ?? false
@@ -196,7 +204,6 @@ extension ChromeCastController: GCKRemoteMediaClientListener {
         var args = [
             "progress" :position.milliseconds,
         ]
-        
             channel.invokeMethod("chromeCast#progressChanged", arguments: args)
             print("position: \(mediaStatus?.streamPosition)")
         }
@@ -207,7 +214,6 @@ extension ChromeCastController: GCKRemoteMediaClientListener {
 
 extension ChromeCastController: GCKRequestDelegate {
     func requestDidComplete(_ request: GCKRequest) {
-
         channel.invokeMethod("chromeCast#requestDidComplete", arguments: nil)
     }
 

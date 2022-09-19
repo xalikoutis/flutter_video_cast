@@ -95,6 +95,10 @@ abstract class ChromeCastPlatform {
     throw UnimplementedError('seek() has not been implemented.');
   }
 
+  Future<void> dispose({@required int id}) {
+    throw UnimplementedError('dispose() has not been implemented.');
+  }
+
   /// Returns a widget displaying the button.
   Widget buildView(Map<String, dynamic> arguments,
       PlatformViewCreatedCallback onPlatformViewCreated) {
