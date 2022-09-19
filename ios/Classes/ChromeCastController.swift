@@ -200,13 +200,18 @@ extension ChromeCastController: GCKSessionManagerListener {
 extension ChromeCastController: GCKRemoteMediaClientListener {
     
     public func remoteMediaClient(_ client: GCKRemoteMediaClient, didUpdate mediaStatus: GCKMediaStatus?) {
+        
         var position = mediaStatus?.streamPosition ?? TimeInterval(0)
         var args = [
             "progress" :position.milliseconds,
         ]
-            channel.invokeMethod("chromeCast#progressChanged", arguments: args)
-            print("position: \(mediaStatus?.streamPosition)")
+        channel.invokeMethod("chromeCast#progressChanged", arguments: args)
+        print("position: \(mediaStatus?.streamPosition)")
+        if(mediaStatus?.idleReason == GCKMediaPlayerIdleReason.finished){
+            channel.invokeMethod("chromeCast#finished", arguments: args)
         }
+        
+    }
     
 }
 
