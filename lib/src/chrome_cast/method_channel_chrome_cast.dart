@@ -41,13 +41,13 @@ class MethodChannelChromeCast extends ChromeCastPlatform {
   }
 
   @override
-  Future<void> addSessionListener({required int id}) {
+  Future<void>? addSessionListener({required int id}) {
     return channel(id)?.invokeMethod<void>('chromeCast#addSessionListener');
   }
 
   @override
-  Future<void> removeSessionListener({required int id}) {
-    return channel(id).invokeMethod<void>('chromeCast#removeSessionListener');
+  Future<void>? removeSessionListener({required int id}) {
+    return channel(id)?.invokeMethod<void>('chromeCast#removeSessionListener');
   }
 
   @override
@@ -71,45 +71,45 @@ class MethodChannelChromeCast extends ChromeCastPlatform {
   }
 
   @override
-  Future<void> loadMedia(String url, {required int id}) {
+  Future<void>? loadMedia(String url, {required int id}) {
     final Map<String, dynamic> args = {'url': url};
-    return channel(id).invokeMethod<void>('chromeCast#loadMedia', args);
+    return channel(id)?.invokeMethod<void>('chromeCast#loadMedia', args);
   }
 
   @override
-  Future<void> play({required int id}) {
-    return channel(id).invokeMethod<void>('chromeCast#play');
+  Future<void>? play({required int id}) {
+    return channel(id)?.invokeMethod<void>('chromeCast#play');
   }
 
   @override
-  Future<void> pause({required int id}) {
-    return channel(id).invokeMethod<void>('chromeCast#pause');
+  Future<void>? pause({required int id}) {
+    return channel(id)?.invokeMethod<void>('chromeCast#pause');
   }
 
   @override
-  Future<void> seek(bool relative, double interval, {@required int id}) {
+  Future<void>? seek(bool relative, double interval, {required int id}) {
     final Map<String, dynamic> args = {'relative': relative, 'interval': interval};
-    return channel(id).invokeMethod<void>('chromeCast#seek', args);
+    return channel(id)?.invokeMethod<void>('chromeCast#seek', args);
   }
 
   @override
-  Future<void> stop({required int id}) {
-    return channel(id).invokeMethod<void>('chromeCast#stop');
+  Future<void>? stop({required int id}) {
+    return channel(id)?.invokeMethod<void>('chromeCast#stop');
   }
 
   @override
-  Future<void> dispose({required int id}) {
-    return channel(id).invokeMethod<void>('chromeCast#dispose');
+  Future<void>? dispose({required int id}) {
+    return channel(id)?.invokeMethod<void>('chromeCast#dispose');
   }
 
   @override
-  Future<bool> isConnected({required int id}) {
-    return channel(id).invokeMethod<bool>('chromeCast#isConnected');
+  Future<bool?>? isConnected({required int id}) {
+    return channel(id)?.invokeMethod<bool?>('chromeCast#isConnected');
   }
 
   @override
-  Future<bool> isPlaying({required int id}) {
-    return channel(id).invokeMethod<bool>('chromeCast#isPlaying');
+  Future<bool?>? isPlaying({required int id}) {
+    return channel(id)?.invokeMethod<bool>('chromeCast#isPlaying');
   }
 
   @override

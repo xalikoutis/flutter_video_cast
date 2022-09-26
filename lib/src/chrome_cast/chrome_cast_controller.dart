@@ -16,53 +16,53 @@ class ChromeCastController {
   }
 
   /// Add listener for receive callbacks.
-  Future<void> addSessionListener() {
+  Future<void>? addSessionListener() {
     return _chromeCastPlatform.addSessionListener(id: id);
   }
 
   /// Remove listener for receive callbacks.
-  Future<void> removeSessionListener() {
+  Future<void>? removeSessionListener() {
     return _chromeCastPlatform.removeSessionListener(id: id);
   }
 
   /// Load a new media by providing an [url].
-  Future<void> loadMedia(String url) {
+  Future<void>? loadMedia(String url) {
     return _chromeCastPlatform.loadMedia(url, id: id);
   }
 
   /// Plays the video playback.
-  Future<void> play() {
+  Future<void>? play() {
     return _chromeCastPlatform.play(id: id);
   }
 
   /// Pauses the video playback.
-  Future<void> pause() {
+  Future<void>? pause() {
     return _chromeCastPlatform.pause(id: id);
   }
 
   /// If [relative] is set to false sets the video position to an [interval] from the start.
   ///
   /// If [relative] is set to true sets the video position to an [interval] from the current position.
-  Future<void> seek({bool relative = false, double interval = 10.0}) {
+  Future<void>? seek({bool relative = false, double interval = 10.0}) {
     return _chromeCastPlatform.seek(relative, interval, id: id);
   }
 
   /// Stop the current video.
-  Future<void> stop() {
+  Future<void>? stop() {
     return _chromeCastPlatform.stop(id: id);
   }
 
-  Future<void> dispose() {
+  Future<void>? dispose() {
     return _chromeCastPlatform.dispose(id: id);
   }
 
   /// Returns `true` when a cast session is connected, `false` otherwise.
-  Future<bool> isConnected() {
+  Future<bool?>? isConnected() {
     return _chromeCastPlatform.isConnected(id: id);
   }
 
   /// Returns `true` when a cast session is playing, `false` otherwise.
-  Future<bool> isPlaying() {
+  Future<bool?>? isPlaying() {
     return _chromeCastPlatform.isPlaying(id: id);
   }
 }

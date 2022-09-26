@@ -56,6 +56,8 @@ class ChromeCastButton extends StatefulWidget {
 
   final OnProgressChanged? onProgressChanged;
 
+  late final ChromeCastController controller;
+
   @override
   State<ChromeCastButton> createState() => _ChromeCastButtonState();
 }
@@ -64,8 +66,8 @@ class _ChromeCastButtonState extends State<ChromeCastButton> {
 
   @override
   void dispose() {
-    _chromeCastPlatform.dispose(id: null);
     super.dispose();
+    widget.controller.dispose();
   }
 
   @override
@@ -84,35 +86,35 @@ class _ChromeCastButtonState extends State<ChromeCastButton> {
   }
 
   Future<void> _onPlatformViewCreated(int id) async {
-    final ChromeCastController controller = await ChromeCastController.init(id);
+    widget.controller = await ChromeCastController.init(id);
     if (widget.onButtonCreated != null) {
-      widget.onButtonCreated!(controller);
+      widget.onButtonCreated!(widget.controller);
     }
     if (widget.onSessionStarted != null) {
       _chromeCastPlatform
           .onSessionStarted(id: id)
-          .listen((_) => widget.onSessionStarted!());
+          ?.listen((_) => widget.onSessionStarted!());
     }
     if (widget.onSessionEnded != null) {
       _chromeCastPlatform
           .onSessionEnded(id: id)
-          .listen((_) => widget.onSessionEnded!());
+          ?.listen((_) => widget.onSessionEnded!());
     }
     if (widget.onRequestCompleted != null) {
       _chromeCastPlatform
           .onRequestCompleted(id: id)
-          .listen((_) => widget.onRequestCompleted!());
+          ?.listen((_) => widget.onRequestCompleted!());
     }
     if (widget.onRequestFailed != null) {
       _chromeCastPlatform
           .onRequestFailed(id: id)
-          .listen((event) => widget.onRequestFailed!(event.error));
+          ?.listen((event) => widget.onRequestFailed!(event.error));
     }
 
     if ( widget.onProgressChanged!= null) {
       _chromeCastPlatform
           .progressChanged(id: id)
-          .listen((event) => widget.onProgressChanged!(event.progress));
+          ?.listen((event) => widget.onProgressChanged!(event.progress));
     }
   }
 }

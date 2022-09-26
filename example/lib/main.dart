@@ -22,7 +22,7 @@ class CastSample extends StatefulWidget {
 }
 
 class _CastSampleState extends State<CastSample> {
-  ChromeCastController _controller;
+  ChromeCastController? _controller;
   AppState _state = AppState.idle;
   bool _playing = false;
 
@@ -80,7 +80,7 @@ class _CastSampleState extends State<CastSample> {
       children: <Widget>[
         _RoundIconButton(
           icon: Icons.replay_10,
-          onPressed: () => _controller.seek(relative: true, interval: -10.0),
+          onPressed: () => _controller?.seek(relative: true, interval: -10.0),
         ),
         _RoundIconButton(
             icon: _playing
@@ -90,34 +90,36 @@ class _CastSampleState extends State<CastSample> {
         ),
         _RoundIconButton(
           icon: Icons.forward_10,
-          onPressed: () => _controller.seek(relative: true, interval: 10.0),
+          onPressed: () => _controller?.seek(relative: true, interval: 10.0),
         )
       ],
     );
   }
 
   Future<void> _playPause() async {
-    final playing = await _controller.isPlaying();
+    final playing = await _controller?.isPlaying();
+    if(playing ==null) return;
     if(playing) {
-      await _controller.pause();
+      await _controller?.pause();
     } else {
-      await _controller.play();
+      await _controller?.play();
     }
     setState(() => _playing = !playing);
   }
 
   Future<void> _onButtonCreated(ChromeCastController controller) async {
     _controller = controller;
-    await _controller.addSessionListener();
+    await _controller?.addSessionListener();
   }
 
   Future<void> _onSessionStarted() async {
     setState(() => _state = AppState.connected);
-    await _controller.loadMedia('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4');
+    await _controller?.loadMedia('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4');
   }
 
   Future<void> _onRequestCompleted() async {
-    final playing = await _controller.isPlaying();
+    final playing = await _controller?.isPlaying();
+    if(playing ==null) return;
     setState(() {
       _state = AppState.mediaLoaded;
       _playing = playing;
@@ -135,8 +137,8 @@ class _RoundIconButton extends StatelessWidget {
   final VoidCallback onPressed;
 
   _RoundIconButton({
-    @required this.icon,
-    @required this.onPressed
+    required this.icon,
+    required this.onPressed
   });
 
   @override
