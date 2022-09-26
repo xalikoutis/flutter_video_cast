@@ -32,7 +32,7 @@ class MethodChannelChromeCast extends ChromeCastPlatform {
   @override
   Future<void>? init(int id) {
     MethodChannel? channel;
-    if (_channels.containsKey(id)) {
+    if (!_channels.containsKey(id)) {
       channel = MethodChannel('flutter_video_cast/chromeCast_$id');
       channel.setMethodCallHandler((call) => _handleMethodCall(call, id));
       _channels[id] = channel;
@@ -103,13 +103,13 @@ class MethodChannelChromeCast extends ChromeCastPlatform {
   }
 
   @override
-  Future<bool?>? isConnected({required int id}) {
-    return channel(id)?.invokeMethod<bool?>('chromeCast#isConnected');
+  Future<bool?> isConnected({required int id}) {
+    return channel(id)?.invokeMethod<bool?>('chromeCast#isConnected') ?? Future.value(false);
   }
 
   @override
-  Future<bool?>? isPlaying({required int id}) {
-    return channel(id)?.invokeMethod<bool>('chromeCast#isPlaying');
+  Future<bool?> isPlaying({required int id}) {
+    return channel(id)?.invokeMethod<bool?>('chromeCast#isPlaying') ?? Future.value(false);
   }
 
   @override
