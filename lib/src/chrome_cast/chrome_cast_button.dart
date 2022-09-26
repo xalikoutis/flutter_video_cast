@@ -90,7 +90,7 @@ class _ChromeCastButtonState extends State<ChromeCastButton> {
     }
     if (widget.onSessionStarted != null) {
       _chromeCastPlatform
-          .onSessionStarted(id: id)?
+          .onSessionStarted(id: id)
           .listen((_) => widget.onSessionStarted!());
     }
     if (widget.onSessionEnded != null) {
