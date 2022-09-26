@@ -15,7 +15,7 @@ typedef void OnProgressChanged(int progress);
 class ChromeCastButton extends StatefulWidget {
   /// Creates a widget displaying a ChromeCast button.
   ChromeCastButton(
-      {Key key,
+      {Key? key,
       this.size = 30.0,
       this.color = Colors.black,
       this.onButtonCreated,
@@ -40,21 +40,21 @@ class ChromeCastButton extends StatefulWidget {
   /// Callback method for when the button is ready to be used.
   ///
   /// Used to receive a [ChromeCastController] for this [ChromeCastButton].
-  final OnButtonCreated onButtonCreated;
+  final OnButtonCreated? onButtonCreated;
 
   /// Called when a cast session has started.
-  final VoidCallback onSessionStarted;
+  final VoidCallback? onSessionStarted;
 
   /// Called when a cast session has ended.
-  final VoidCallback onSessionEnded;
+  final VoidCallback? onSessionEnded;
 
   /// Called when a cast request has successfully completed.
-  final VoidCallback onRequestCompleted;
+  final VoidCallback? onRequestCompleted;
 
   /// Called when a cast request has failed.
-  final OnRequestFailed onRequestFailed;
+  final OnRequestFailed? onRequestFailed;
 
-  final OnProgressChanged onProgressChanged;
+  final OnProgressChanged? onProgressChanged;
 
   @override
   State<ChromeCastButton> createState() => _ChromeCastButtonState();
@@ -64,7 +64,7 @@ class _ChromeCastButtonState extends State<ChromeCastButton> {
 
   @override
   void dispose() {
-    _chromeCastPlatform.dispose();
+    _chromeCastPlatform.dispose(id: null);
     super.dispose();
   }
 
@@ -86,33 +86,33 @@ class _ChromeCastButtonState extends State<ChromeCastButton> {
   Future<void> _onPlatformViewCreated(int id) async {
     final ChromeCastController controller = await ChromeCastController.init(id);
     if (widget.onButtonCreated != null) {
-      widget.onButtonCreated(controller);
+      widget.onButtonCreated!(controller);
     }
     if (widget.onSessionStarted != null) {
       _chromeCastPlatform
-          .onSessionStarted(id: id)
-          .listen((_) => widget.onSessionStarted());
+          .onSessionStarted(id: id)?
+          .listen((_) => widget.onSessionStarted!());
     }
     if (widget.onSessionEnded != null) {
       _chromeCastPlatform
           .onSessionEnded(id: id)
-          .listen((_) => widget.onSessionEnded());
+          .listen((_) => widget.onSessionEnded!());
     }
     if (widget.onRequestCompleted != null) {
       _chromeCastPlatform
           .onRequestCompleted(id: id)
-          .listen((_) => widget.onRequestCompleted());
+          .listen((_) => widget.onRequestCompleted!());
     }
     if (widget.onRequestFailed != null) {
       _chromeCastPlatform
           .onRequestFailed(id: id)
-          .listen((event) => widget.onRequestFailed(event.error));
+          .listen((event) => widget.onRequestFailed!(event.error));
     }
 
     if ( widget.onProgressChanged!= null) {
       _chromeCastPlatform
           .progressChanged(id: id)
-          .listen((event) => widget.onProgressChanged(event.progress));
+          .listen((event) => widget.onProgressChanged!(event.progress));
     }
   }
 }

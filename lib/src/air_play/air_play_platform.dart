@@ -15,17 +15,17 @@ abstract class AirPlayPlatform {
   /// Initializes the platform interface with [id].
   ///
   /// This method is called when the plugin is first initialized.
-  Future<void> init(int id) {
+  Future<void>? init(int id) {
     throw UnimplementedError('init() has not been implemented.');
   }
 
   /// The route is opening.
-  Stream<RoutesOpeningEvent> onRoutesOpening({@required int id}) {
+  Stream<RoutesOpeningEvent> onRoutesOpening({required int id}) {
     throw UnimplementedError('onRoutesOpening() has not been implemented.');
   }
 
   /// The route has closed.
-  Stream<RoutesClosedEvent> onRoutesClosed({@required int id}) {
+  Stream<RoutesClosedEvent> onRoutesClosed({required int id}) {
     throw UnimplementedError('onRoutesClosed() has not been implemented.');
   }
 
