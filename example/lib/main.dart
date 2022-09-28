@@ -41,7 +41,7 @@ class _CastSampleState extends State<CastSample> {
           ),
           ChromeCastButton(
             size: CastSample._iconSize,
-            color: Colors.white,
+            color: Colors.black,
             onButtonCreated: _onButtonCreated,
             onSessionStarted: _onSessionStarted,
             onSessionEnded: () => setState(() => _state = AppState.idle),

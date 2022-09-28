@@ -1,9 +1,8 @@
 package it.aesys.flutter_video_cast
 
 import android.content.Context
-import android.util.Log
+import android.graphics.Color
 import android.view.ContextThemeWrapper
-import androidx.mediarouter.app.MediaRouteButton
 import com.google.android.gms.cast.MediaInfo
 import com.google.android.gms.cast.MediaLoadOptions
 import com.google.android.gms.cast.framework.CastButtonFactory
@@ -22,17 +21,29 @@ import java.util.HashMap
 class ChromeCastController(
         messenger: BinaryMessenger,
         viewId: Int,
-        context: Context?
+        context: Context?,
+        args: Any?
 ) : PlatformView, MethodChannel.MethodCallHandler, SessionManagerListener<Session>, PendingResult.StatusListener {
     private val channel = MethodChannel(messenger, "flutter_video_cast/chromeCast_$viewId")
-    private val chromeCastButton = MediaRouteButton(ContextThemeWrapper(context, R.style.Theme_AppCompat_NoActionBar))
+    private val chromeCastButton = ColorableMediaRouteButton(ContextThemeWrapper(context, R.style.Theme_AppCompat_NoActionBar))
     private val sessionManager = CastContext.getSharedInstance()?.sessionManager
 
     init {
         if (context != null) {
             CastButtonFactory.setUpMediaRouteButton(context, chromeCastButton)
         }
+        applyTint(args)
         channel.setMethodCallHandler(this)
+    }
+
+    private fun applyTint(args: Any?){
+        if (args is Map<*, *>) {
+            val red = args["red"] as Int
+            val green = args["green"] as Int
+            val blue = args["blue"] as Int
+            val alpha = args["alpha"] as Int
+            chromeCastButton.post { chromeCastButton.applyTint(Color.argb(alpha, red, green, blue)) }
+        }
     }
 
     private fun loadMedia(args: Any?) {
