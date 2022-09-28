@@ -32,7 +32,7 @@ class ChromeCastController(
         if (context != null) {
             CastButtonFactory.setUpMediaRouteButton(context, chromeCastButton)
         }
-        applyTint(args)
+        //applyTint(args)
         channel.setMethodCallHandler(this)
     }
 

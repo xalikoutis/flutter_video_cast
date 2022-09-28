@@ -27,12 +27,16 @@ class ColorableMediaRouteButton : MediaRouteButton {
     }
 
     fun applyTint(color: Int) {
-        val field: Field = MediaRouteButton::class.java.getDeclaredField("mRemoteIndicator")
+        /*val field: Field = MediaRouteButton::class.java.getDeclaredField("mRemoteIndicator")
         field.isAccessible = true
         val remoteIndicator = field.get(this) as Drawable
         remoteIndicator.callback = null
         unscheduleDrawable(remoteIndicator)
         val wrapDrawable = DrawableCompat.wrap(remoteIndicator)
-        DrawableCompat.setTint(wrapDrawable, color)
+        DrawableCompat.setTint(wrapDrawable, color)*/
+        val wrapDrawable = mRemoteIndicatorDrawable?.let { DrawableCompat.wrap(it) }
+        if (wrapDrawable != null) {
+            DrawableCompat.setTint(wrapDrawable, color)
+        }
     }
 }
