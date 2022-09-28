@@ -118,7 +118,7 @@ class ChromeCastController(
     override fun getView() = chromeCastButton
 
     override fun dispose() {
-
+        sessionManager?.endCurrentSession(true)
     }
 
     // Flutter methods handling
@@ -154,6 +154,10 @@ class ChromeCastController(
             }
             "chromeCast#removeSessionListener" -> {
                 removeSessionListener()
+                result.success(null)
+            }
+            "chromeCast#dispose"-> {
+                sessionManager?.endCurrentSession(true)
                 result.success(null)
             }
         }

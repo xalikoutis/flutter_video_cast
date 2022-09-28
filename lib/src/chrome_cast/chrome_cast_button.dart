@@ -67,7 +67,7 @@ class _ChromeCastButtonState extends State<ChromeCastButton> {
   @override
   void dispose() {
     super.dispose();
-    //widget.controller.dispose();
+    widget.controller.dispose();
   }
 
   @override
